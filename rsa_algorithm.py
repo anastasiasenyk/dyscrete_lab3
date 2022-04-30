@@ -9,7 +9,7 @@ def set_dictionary() -> dict:
     """
     dict_letters = {'': '000'}
     code = 1
-    for symbol in """ ,.:;!?@§#$%&*"'`^_-+±=~()[]{}<>|/\\1234567890\tІіЇїҐґ""":
+    for symbol in """ ,.:;!?@§#$%&*"'`^_-+±=~()[]{}<>|/\\1234567890\tІіЇїҐґЄє№₴""":
         if code <= 9:
             letter_code = '00' + str(code)
         elif code <= 99:
@@ -37,7 +37,7 @@ def text_into_blocks(message: str, block_size: int) -> list:
     :param block_size: int
     :return: list
     >>> text_into_blocks('Привіт? Hello!', 9)
-    ['120153145', '139048155', '007001060', '083090090', '093006000']
+    ['124157149', '143048159', '007001064', '087094094', '097006000']
     """
     blocks = []
     dict_symbols = set_dictionary()
@@ -55,7 +55,7 @@ def blocks_into_text(blocks: list, block_size: int) -> str:
     :param blocks: list
     :param block_size: int
     :return: str
-    >>> blocks_into_text(['120153145', '139048155', '007001060', '083090090', '093006000'], 9)
+    >>> blocks_into_text(['124157149', '143048159', '007001064', '087094094', '097006000'], 9)
     'Привіт? Hello!'
     """
     dictionary_keys = list(set_dictionary().keys())
@@ -74,10 +74,10 @@ def encrypt_rsa(message: str, public_key: tuple) -> list:
     :param public_key: tuple(N, e)
     :return: list
     >>> encrypt_rsa('Привіт? Hello!', (226679, 2737))
-    [178378, 134311, 215324, 11020, 43621, 43640, 207535]
+    [32688, 44161, 193026, 14987, 58027, 151658, 219982, 1, 69011, 44230, 173593, 173593, 12513, 161224]
     """
     n, e = public_key
-    block_size = 3*(len(str(n))//3)
+    block_size = 3*(len(str(n))//3-1)
     encrypted_blocks = []
     for item in text_into_blocks(message, block_size):
         encrypted_blocks.append(pow(int(item), e, n))
@@ -90,11 +90,11 @@ def decrypt_rsa(encrypted_blocks: list, private_key: tuple) -> str:
     :param encrypted_blocks: list
     :param private_key: tuple(N, d)
     :return: str
-    >>> decrypt_rsa([178378, 134311, 215324, 11020, 43621, 43640, 207535], (226679, 46513))
+    >>> decrypt_rsa([32688, 44161, 193026, 14987, 58027, 151658, 219982, 1, 69011, 44230, 173593, 173593, 12513, 161224], (226679, 46513))
     'Привіт? Hello!'
     """
     n, d = private_key
-    block_size = 3*(len(str(n))//3)
+    block_size = 3*(len(str(n))//3-1)
     decrypted_blocks = []
     for item in encrypted_blocks:
         decrypted_blocks.append(pow(item, d, n))
@@ -113,3 +113,21 @@ def hash_message(data: str) -> bytes:
     data = data.encode('utf-8')
     sha3_512 = hashlib.sha3_512(data).digest()
     return sha3_512
+
+
+if __name__ == '__main__':
+    p = 323668371017053245076781959852651399073
+    q = 331318082447175434156538062552480205143
+    N = p * q
+    e = 65537
+    d = pow(e, -1, (p - 1) * (q - 1))
+
+    # message = input('message: ')
+    #
+    # e_blocks = encrypt_rsa(message, (N, e))
+    # print('encrypted: ', e_blocks)
+    #
+    # de_blocks = decrypt_rsa(e_blocks, (N, d))
+    # print('decrypted: ', de_blocks)
+    #
+    # print('hash1 == hash2: ', hash_message(message) == hash_message(de_blocks))
