@@ -2,9 +2,9 @@ import socket
 import threading
 from math import gcd
 from big_prime_gen import prime_generator
-from coding import encrypt_rsa
-from coding import decrypt_rsa
-from coding import hash_message
+from rsa_algorithm import encrypt_rsa
+from rsa_algorithm import decrypt_rsa
+from rsa_algorithm import hash_message
 
 
 class Client:
