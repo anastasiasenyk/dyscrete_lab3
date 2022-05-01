@@ -74,7 +74,6 @@ class Client:
             message += '\n'
             message += str(hash)
 
-            # self.s.send(hash)
             self.s.send(message.encode())
 
 if __name__ == "__main__":
