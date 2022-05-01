@@ -1,5 +1,10 @@
 import socket
 import threading
+from math import gcd
+from big_prime_gen import prime_generator
+from coding import encrypt_rsa
+from coding import decrypt_rsa
+from coding import hash_message
 
 
 class Client:
@@ -7,6 +12,22 @@ class Client:
         self.server_ip = server_ip
         self.port = port
         self.username = username
+        self.open_key = None
+        self.secret_key = None
+        self.server_open_key = None
+
+    def key_generation(self, bits_num=1024):
+        """Generates keys for the client"""
+        while True:
+            e = 65537
+            p = prime_generator(bits_num)
+            q = prime_generator(bits_num)
+            n = p * q
+            if gcd((p-1) * (q-1), e) == 1:
+                d = pow(e, -1, (p-1) * (q-1))
+                break
+        self.open_key = (n, e)
+        self.secret_key = (n, d)
 
     def init_connection(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,38 +39,42 @@ class Client:
 
         self.s.send(self.username.encode())
 
-        # create key pairs
+        self.key_generation()
 
-        # exchange public keys
+        self.s.send((str(self.open_key[0]) + ' ' + str(self.open_key[1])).encode())
 
-        # receive the encrypted secret key
-
-        message_handler = threading.Thread(target=self.read_handler, args=())
+        message_handler = threading.Thread(target=self.read_handler,args=())
         message_handler.start()
-        input_handler = threading.Thread(target=self.write_handler, args=())
+        input_handler = threading.Thread(target=self.write_handler,args=())
         input_handler.start()
 
     def read_handler(self): 
+        self.server_open_key = self.s.recv(1024).decode()
+        self.server_open_key = self.server_open_key.split(' ')
+        self.server_open_key = list(map(int, self.server_open_key))
+
+
         while True:
+            hash = self.s.recv(1024)
             message = self.s.recv(1024).decode()
 
-            # decrypt message with the secrete key
-
-            # ... 
-
+            message = decrypt_rsa(message, self.secret_key)
+            print(hash == hash_message(message))
 
             print(message)
 
     def write_handler(self):
         while True:
             message = input()
+            hash = hash_message(message)
 
-            # encrypt message with the secrete key
+            message = encrypt_rsa(message, self.server_open_key)
 
-            # ...
+            message += ' '
+            message += str(hash)
 
+            # self.s.send(hash)
             self.s.send(message.encode())
-
 
 if __name__ == "__main__":
     cl = Client("127.0.0.1", 9001, "b_g")

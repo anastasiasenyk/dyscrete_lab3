@@ -114,24 +114,3 @@ def hash_message(data: str) -> bytes:
     data = data.encode('utf-8')
     sha3_512 = hashlib.sha3_512(data).digest()
     return sha3_512
-
-
-if __name__ == '__main__':
-    p = 323668371017053245076781959852651399073
-    q = 331318082447175434156538062552480205143
-    N = p * q
-    e = 65537
-    d = pow(e, -1, (p - 1) * (q - 1))
-
-    # message = input('message: ')
-    #
-    # e_blocks = encrypt_rsa(message, (N, e))
-    # print('encrypted: ', e_blocks)
-    #
-    # de_blocks = decrypt_rsa(e_blocks, (N, d))
-    # print('decrypted: ', de_blocks)
-    #
-    # print('hash1 == hash2: ', hash_message(message) == hash_message(de_blocks))
-
-    hash = hash_message('askal')
-    print((type(str(hash))))
