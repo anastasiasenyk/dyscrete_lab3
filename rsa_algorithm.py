@@ -74,30 +74,31 @@ def encrypt_rsa(message: str, public_key: tuple) -> list:
     :param public_key: tuple(N, e)
     :return: list
     >>> encrypt_rsa('Привіт? Hello!', (226679, 2737))
-    [32688, 44161, 193026, 14987, 58027, 151658, 219982, 1, 69011, 44230, 173593, 173593, 12513, 161224]
+    '32688 44161 193026 14987 58027 151658 219982 1 69011 44230 173593 173593 12513 161224'
     """
     n, e = public_key
     block_size = 3*(len(str(n))//3-1)
     encrypted_blocks = []
     for item in text_into_blocks(message, block_size):
-        encrypted_blocks.append(pow(int(item), e, n))
-    return encrypted_blocks
+        encrypted_blocks.append(str(pow(int(item), e, n)))
+
+    return ' '.join(encrypted_blocks)
 
 
-def decrypt_rsa(encrypted_blocks: list, private_key: tuple) -> str:
+def decrypt_rsa(encrypted_blocks: str, private_key: tuple) -> str:
     """
     decoding the message according to the RCA algorithm
     :param encrypted_blocks: list
     :param private_key: tuple(N, d)
     :return: str
-    >>> decrypt_rsa([32688, 44161, 193026, 14987, 58027, 151658, 219982, 1, 69011, 44230, 173593, 173593, 12513, 161224], (226679, 46513))
+    >>> decrypt_rsa('32688 44161 193026 14987 58027 151658 219982 1 69011 44230 173593 173593 12513 161224', (226679, 46513))
     'Привіт? Hello!'
     """
     n, d = private_key
     block_size = 3*(len(str(n))//3-1)
     decrypted_blocks = []
-    for item in encrypted_blocks:
-        decrypted_blocks.append(pow(item, d, n))
+    for item in encrypted_blocks.split(' '):
+        decrypted_blocks.append(pow(int(item), d, n))
     return blocks_into_text(decrypted_blocks, block_size)
 
 
@@ -122,12 +123,12 @@ if __name__ == '__main__':
     e = 65537
     d = pow(e, -1, (p - 1) * (q - 1))
 
-    # message = input('message: ')
-    #
-    # e_blocks = encrypt_rsa(message, (N, e))
-    # print('encrypted: ', e_blocks)
-    #
-    # de_blocks = decrypt_rsa(e_blocks, (N, d))
-    # print('decrypted: ', de_blocks)
-    #
-    # print('hash1 == hash2: ', hash_message(message) == hash_message(de_blocks))
+    message = input('message: ')
+
+    e_blocks = encrypt_rsa(message, (N, e))
+    print('encrypted: ', e_blocks)
+
+    de_blocks = decrypt_rsa(e_blocks, (N, d))
+    print('decrypted: ', de_blocks)
+
+    print('hash1 == hash2: ', hash_message(message) == hash_message(de_blocks))
