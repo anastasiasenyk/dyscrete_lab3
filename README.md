@@ -3,9 +3,9 @@
 
 
 ## Module:
-1. [client.py] (#func3)
-2. [server.py] (#func2)
-3. [rsa_algorithm.py] (#func1)
+1. [client.py](#func3)
+2. [server.py](#func2)
+3. [rsa_algorithm.py](#func1)
 
 
 <a id="func3"></a>
