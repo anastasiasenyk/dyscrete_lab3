@@ -5,6 +5,7 @@ from big_prime_gen import prime_generator
 from rsa_algorithm import encrypt_rsa
 from rsa_algorithm import decrypt_rsa
 from rsa_algorithm import hash_message
+from rsa_algorithm import set_dictionary
 
 
 class Client:
@@ -48,11 +49,10 @@ class Client:
         input_handler = threading.Thread(target=self.write_handler,args=())
         input_handler.start()
 
-    def read_handler(self): 
+    def read_handler(self):
         self.server_open_key = self.s.recv(1024).decode()
         self.server_open_key = self.server_open_key.split(' ')
         self.server_open_key = list(map(int, self.server_open_key))
-
 
         while True:
             hash = self.s.recv(1024)
@@ -65,17 +65,26 @@ class Client:
             print(message)
 
     def write_handler(self):
+        available_symbols = set_dictionary()
         while True:
             message = input()
-            hash = hash_message(message)
 
-            message = encrypt_rsa(message, self.server_open_key)
+            # Check for correct symbols
+            flag = True
+            for symb in message:
+                if symb not in available_symbols.keys():
+                    print(f'{symb} can not be encrypted. Write you message without it.')
+                    flag = False
 
-            message += '\n'
-            message += str(hash)
+            if flag:
+                hash = hash_message(message)
 
-            # self.s.send(hash)
-            self.s.send(message.encode())
+                message = encrypt_rsa(message, self.server_open_key)
+
+                message += '\n'
+                message += str(hash)
+
+                self.s.send(message.encode())
 
 if __name__ == "__main__":
     cl = Client("127.0.0.1", 9001, "b_g")

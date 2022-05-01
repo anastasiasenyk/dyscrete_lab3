@@ -74,7 +74,8 @@ def encrypt_rsa(message: str, public_key: tuple) -> list:
     :param public_key: tuple(N, e)
     :return: list
     >>> encrypt_rsa('Привіт? Hello!', (226679, 2737))
-    '32688 44161 193026 14987 58027 151658 219982 1 69011 44230 173593 173593 12513 161224'
+    '32688 44161 193026 14987 58027 151658 219982 1 69011 44230 \
+173593 173593 12513 161224'
     """
     n, e = public_key
     block_size = 3*(len(str(n))//3-1)
@@ -91,7 +92,8 @@ def decrypt_rsa(encrypted_blocks: str, private_key: tuple) -> str:
     :param encrypted_blocks: list
     :param private_key: tuple(N, d)
     :return: str
-    >>> decrypt_rsa('32688 44161 193026 14987 58027 151658 219982 1 69011 44230 173593 173593 12513 161224', (226679, 46513))
+    >>> decrypt_rsa('32688 44161 193026 14987 58027 151658 219982 1 69011 \
+44230 173593 173593 12513 161224', (226679, 46513))
     'Привіт? Hello!'
     """
     n, d = private_key

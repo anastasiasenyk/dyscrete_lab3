@@ -54,7 +54,7 @@ class Server:
         for client in self.clients:
             client[0].send(msg.encode())
 
-    def handle_client(self, c: socket, add): 
+    def handle_client(self, c: socket, add):
         while True:
             msg = c.recv(1024).decode()
             msg = msg.split('\n')
@@ -75,8 +75,8 @@ class Server:
                 cl_key = client[1]
                 if client[0] != c:
                     client[0].send(hash_message(msg))
-                    msg = encrypt_rsa(msg, cl_key)
-                    client[0].send(msg.encode())
+                    message = encrypt_rsa(msg, cl_key)
+                    client[0].send(message.encode())
 
 if __name__ == "__main__":
     s = Server(9001)

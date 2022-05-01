@@ -2,7 +2,7 @@
 import random
 
 basic_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
-					31, 37, 41, 43, 47, 53, 59, 61, 67,
+    				31, 37, 41, 43, 47, 53, 59, 61, 67,
 					71, 73, 79, 83, 89, 97, 101, 103,
 					107, 109, 113, 127, 131, 137, 139,
 					149, 151, 157, 163, 167, 173, 179,
@@ -14,6 +14,7 @@ basic_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 					389, 397, 401, 409, 419, 421, 431,
 					433, 439, 443, 449, 457, 461, 463]
 
+
 def get_possible_prime(n):
 	'''Check if number is divided by simple primes'''
 	while True:
@@ -22,6 +23,7 @@ def get_possible_prime(n):
 			if possible_prime % num == 0:
 				break
 		else: return possible_prime
+
 
 def miller_rabin_test(num):
 	'''Runs Miller-Rabin test for a lot of times (25)'''
@@ -45,6 +47,7 @@ def miller_rabin_test(num):
 		if prime_tester(round_tester):
 			return False
 	return True
+
 
 def prime_generator(bits_num=1024):
 	"""Generates a prime number with given length"""
