@@ -2,9 +2,9 @@ import socket
 import threading
 from math import gcd
 from big_prime_gen import prime_generator
-from coding import encrypt_rsa
-from coding import decrypt_rsa
-from coding import hash_message
+from rsa_algorithm import encrypt_rsa
+from rsa_algorithm import decrypt_rsa
+from rsa_algorithm import hash_message
 
 
 class Server:
@@ -57,13 +57,20 @@ class Server:
     def handle_client(self, c: socket, add): 
         while True:
             msg = c.recv(1024).decode()
-            msg = msg.split()
-            # print(msg)
+            msg = msg.split('\n')
             hash = msg[1]
             msg = msg[0]
             msg = decrypt_rsa(msg, self.secret_key)
-            print('Hash:')
-            print(hash == str(hash_message(msg)))
+
+            if hash != str(hash_message(msg)):
+                error = 'Hash of the message is not equal! Possible transfering error.'
+                for client in self.clients:
+                    if client[0] == c:
+                        cl_key = client[1]
+                c.send(hash_message(error))
+                error = encrypt_rsa(msg, cl_key)
+                c.send(error.encode())
+
             for client in self.clients:
                 cl_key = client[1]
                 if client[0] != c:
