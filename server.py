@@ -54,7 +54,7 @@ class Server:
         for client in self.clients:
             client[0].send(msg.encode())
 
-    def handle_client(self, c: socket, add): 
+    def handle_client(self, c: socket, add):
         while True:
             msg = c.recv(1024).decode()
             msg = msg.split('\n')
