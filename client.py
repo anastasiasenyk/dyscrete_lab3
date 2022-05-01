@@ -4,6 +4,7 @@ from math import gcd
 from big_prime_gen import prime_generator
 from rsa_algorithm import encrypt_rsa
 from rsa_algorithm import decrypt_rsa
+from rsa_algorithm import hash_message
 from rsa_algorithm import set_dictionary
 
 
