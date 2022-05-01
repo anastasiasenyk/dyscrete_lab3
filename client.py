@@ -49,11 +49,10 @@ class Client:
         input_handler = threading.Thread(target=self.write_handler,args=())
         input_handler.start()
 
-    def read_handler(self): 
+    def read_handler(self):
         self.server_open_key = self.s.recv(1024).decode()
         self.server_open_key = self.server_open_key.split(' ')
         self.server_open_key = list(map(int, self.server_open_key))
-
 
         while True:
             hash = self.s.recv(1024)
