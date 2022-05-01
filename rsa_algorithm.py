@@ -123,12 +123,15 @@ if __name__ == '__main__':
     e = 65537
     d = pow(e, -1, (p - 1) * (q - 1))
 
-    message = input('message: ')
+    # message = input('message: ')
+    #
+    # e_blocks = encrypt_rsa(message, (N, e))
+    # print('encrypted: ', e_blocks)
+    #
+    # de_blocks = decrypt_rsa(e_blocks, (N, d))
+    # print('decrypted: ', de_blocks)
+    #
+    # print('hash1 == hash2: ', hash_message(message) == hash_message(de_blocks))
 
-    e_blocks = encrypt_rsa(message, (N, e))
-    print('encrypted: ', e_blocks)
-
-    de_blocks = decrypt_rsa(e_blocks, (N, d))
-    print('decrypted: ', de_blocks)
-
-    print('hash1 == hash2: ', hash_message(message) == hash_message(de_blocks))
+    hash = hash_message('askal')
+    print((type(str(hash))))
