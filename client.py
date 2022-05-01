@@ -59,7 +59,8 @@ class Client:
             message = self.s.recv(1024).decode()
 
             message = decrypt_rsa(message, self.secret_key)
-            print(hash == hash_message(message))
+            if hash != hash_message(message):
+                print('Hash of the message is not equal! Possible transfering error.')
 
             print(message)
 
