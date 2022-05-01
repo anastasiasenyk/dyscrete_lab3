@@ -2,9 +2,9 @@ import socket
 import threading
 from math import gcd
 from big_prime_gen import prime_generator
-from rsa_algorithm import encrypt_rsa
-from rsa_algorithm import decrypt_rsa
-from rsa_algorithm import hash_message
+from coding import encrypt_rsa
+from coding import decrypt_rsa
+from coding import hash_message
 
 
 class Client:
@@ -71,7 +71,7 @@ class Client:
 
             message = encrypt_rsa(message, self.server_open_key)
 
-            message += ' '
+            message += '\n'
             message += str(hash)
 
             # self.s.send(hash)
