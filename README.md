@@ -62,19 +62,14 @@
 ### 3. RSA - rsa_algorithm.py
 functions:
  - set_dictionary
-
-    ...
+  set a dictionary with all the characters that can be used in messages
  - text_into_blocks
-
-    ...
+  divide all text into blocks of numbers
  - blocks_into_text
-
-    ...
+ connect blocks of numbers into text
  - encrypt_rsa
-
-    ...
+ encode the message according to the RSA algorithm using a public key
  - decrypt_rsa
-
-    ...
+ decode blocks from numbers according to the RSA algorithm using a private key
 
 
